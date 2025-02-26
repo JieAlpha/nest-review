@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { ExampleMiddlewareModule } from "./example_middleware/example_middleware.module";
+import { ExampleMiddlewareModule } from "./example-middleware/example-middleware.module";
 import { ExampleControllerController } from "./example-controller/example-controller.controller";
 import { ExampleModuleModule } from "./example-module/example-module.module";
 
