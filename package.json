@@ -1,8 +1,8 @@
 {
   "name": "nest-review",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "NestJS Review",
+  "author": "floatDreamWithSong",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

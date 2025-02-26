@@ -18,7 +18,7 @@ export class ExampleFilterController {
     }
 
     @Get("error")
-    @UseFilters(ExampleFilterFilter)  // 只应用于这个特定方法
+    @UseFilters(ExampleFilterFilter) // 只应用于这个特定方法
     throwError() {
         // 抛出一个 HTTP 异常
         throw new HttpException(
