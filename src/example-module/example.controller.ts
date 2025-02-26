@@ -2,7 +2,7 @@ import { Controller, Get, Inject } from "@nestjs/common";
 import { DefaultBaseService, BaseService } from "./services/base.service";
 import { InjectableService } from "./services/injectable.service";
 
-@Controller("example")
+@Controller("example-module")
 export class ExampleController {
     constructor(
         @Inject("SUB_MODULE") private readonly subModule: string,
