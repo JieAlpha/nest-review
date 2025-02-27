@@ -49,14 +49,19 @@ export class ExamplePipelinePipe implements PipeTransform {
         return value;
     }
 
-    private transformParam(value: string, paramName: string) {
+    private async transformParam(value: string, paramName: string) {
         // 处理路由参数
         if (paramName === "id") {
-            const id = parseInt(value, 10);
-            if (isNaN(id)) {
+            const parseIntPipe = new ParseIntPipe();
+            try {
+                return await parseIntPipe.transform(value, {
+                    type: 'param',
+                    metatype: Number,
+                    data: 'id'
+                });
+            } catch (error) {
                 throw new BadRequestException("ID必须是数字");
             }
-            return id;
         }
         return value;
     }
