@@ -53,6 +53,7 @@ export class ExamplePipelinePipe implements PipeTransform {
     }
 
     private async transformParam(value: string, paramName: string) {
+    private async transformParam(value: string, paramName: string) {
         // 处理路由参数
         if (paramName === "id") {
             const parseIntPipe = new ParseIntPipe();
