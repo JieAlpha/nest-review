@@ -6,7 +6,10 @@ import {
     ParseIntPipe,
 } from "@nestjs/common";
 import { z } from "zod"; // zod 是一个强大的数据验证器
-
+/**
+// https://nest.nodejs.cn/techniques/validation#%E9%AA%8C%E8%AF%81
+ * 也可使用 class-validator 和 class-transformer 库，它们与 Nest.js 集成得很好。
+ */
 // 用户创建 DTO 验证模式
 const CreateUserSchema = z.object({
     username: z.string().min(3).max(20),
@@ -49,14 +52,19 @@ export class ExamplePipelinePipe implements PipeTransform {
         return value;
     }
 
-    private transformParam(value: string, paramName: string) {
+    private async transformParam(value: string, paramName: string) {
         // 处理路由参数
         if (paramName === "id") {
-            const id = parseInt(value, 10);
-            if (isNaN(id)) {
+            const parseIntPipe = new ParseIntPipe();
+            try {
+                return await parseIntPipe.transform(value, {
+                    type: 'param',
+                    metatype: Number,
+                    data: 'id'
+                });
+            } catch (error) {
                 throw new BadRequestException("ID必须是数字");
             }
-            return id;
         }
         return value;
     }
