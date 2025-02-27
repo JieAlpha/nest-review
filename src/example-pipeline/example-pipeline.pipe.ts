@@ -58,9 +58,9 @@ export class ExamplePipelinePipe implements PipeTransform {
             const parseIntPipe = new ParseIntPipe();
             try {
                 return await parseIntPipe.transform(value, {
-                    type: 'param',
+                    type: "param",
                     metatype: Number,
-                    data: 'id'
+                    data: "id",
                 });
             } catch (error) {
                 throw new BadRequestException("ID必须是数字");
