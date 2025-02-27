@@ -9,7 +9,7 @@ import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
 import { Request } from "express";
 import { SetMetadata } from "@nestjs/common";
-import { JwtService } from '@nestjs/jwt';
+import { JwtService } from "@nestjs/jwt";
 
 // 自定义装饰器的元数据 key
 export const ROLES_KEY = "roles";
@@ -81,7 +81,7 @@ export class ExampleGuardGuard implements CanActivate {
 
             // 检查用户角色权限
             // 检查用户是否具有所需角色
-            return requiredRoles.some(role => user.role === role);
+            return requiredRoles.some((role) => user.role === role);
         } catch (error) {
             throw new UnauthorizedException("无效的认证信息");
         }
@@ -91,18 +91,21 @@ export class ExampleGuardGuard implements CanActivate {
         try {
             // 验证 JWT token
             const payload = this.jwtService.verify(token, {
-                secret: 'your-secret-key', // 建议使用环境变量存储密钥
+                secret: "your-secret-key", // 建议使用环境变量存储密钥
             });
 
             // 验证 token 是否过期
             const now = Math.floor(Date.now() / 1000);
             if (payload.exp && payload.exp < now) {
-                throw new UnauthorizedException('Token 已过期');
+                throw new UnauthorizedException("Token 已过期");
             }
 
             // 验证用户角色
-            if (!payload.role || !Object.values(UserRole).includes(payload.role)) {
-                throw new UnauthorizedException('无效的用户角色');
+            if (
+                !payload.role ||
+                !Object.values(UserRole).includes(payload.role)
+            ) {
+                throw new UnauthorizedException("无效的用户角色");
             }
 
             return {
@@ -114,7 +117,7 @@ export class ExampleGuardGuard implements CanActivate {
             if (error instanceof UnauthorizedException) {
                 throw error;
             }
-            throw new UnauthorizedException('无效的 token');
+            throw new UnauthorizedException("无效的 token");
         }
     }
 }

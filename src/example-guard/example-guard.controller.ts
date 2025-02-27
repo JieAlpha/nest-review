@@ -20,7 +20,7 @@ export class ExampleGuardController {
             username: "admin",
             role: UserRole.ADMIN,
         });
-        return { message: "这是公开数据" , token };
+        return { message: "这是公开数据", token };
     }
 
     @Get("user")
