@@ -7,6 +7,7 @@ import { ExampleModuleModule } from "./example-module/example-module.module";
 import { ExampleFilterModule } from "./example-filter/example-filter.module";
 import { ExamplePipelineModule } from "./example-pipeline/example-pipeline.module";
 import { ExampleGuardModule } from "./example-guard/example-guard.module";
+import { ExampleInterceptorModule } from "./example-interceptor/example-interceptor.module";
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { ExampleGuardModule } from "./example-guard/example-guard.module";
         ExampleFilterModule,
         ExamplePipelineModule,
         ExampleGuardModule,
+        ExampleInterceptorModule
     ],
     controllers: [AppController, ExampleControllerController],
     providers: [AppService],
