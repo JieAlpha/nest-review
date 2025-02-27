@@ -1,6 +1,14 @@
-import { CallHandler, ExecutionContext, HttpException, HttpStatus, Injectable, NestInterceptor, RequestTimeoutException } from '@nestjs/common';
-import { Observable, throwError, TimeoutError } from 'rxjs';
-import { map, tap, catchError, timeout } from 'rxjs/operators';
+import {
+    CallHandler,
+    ExecutionContext,
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NestInterceptor,
+    RequestTimeoutException,
+} from "@nestjs/common";
+import { Observable, throwError, TimeoutError } from "rxjs";
+import { map, tap, catchError, timeout } from "rxjs/operators";
 
 // 响应数据接口
 interface Response<T> {
@@ -24,24 +32,29 @@ export class LoggingInterceptor implements NestInterceptor {
             tap((data) => {
                 const responseTime = Date.now() - now;
                 console.log(`⬆️ ${method} ${url} - ${responseTime}ms`);
-                console.log('Response:', data);
+                console.log("Response:", data);
             }),
         );
     }
 }
 
 @Injectable()
-export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> {
-    intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
+export class TransformInterceptor<T>
+    implements NestInterceptor<T, Response<T>>
+{
+    intercept(
+        context: ExecutionContext,
+        next: CallHandler,
+    ): Observable<Response<T>> {
         const request = context.switchToHttp().getRequest();
 
         return next.handle().pipe(
-            map(data => ({
+            map((data) => ({
                 data,
                 timestamp: Date.now(),
                 path: request.url,
-                status: HttpStatus.OK
-            }))
+                status: HttpStatus.OK,
+            })),
         );
     }
 }
@@ -50,14 +63,17 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
 export class ErrorsInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         return next.handle().pipe(
-            catchError(error => {
+            catchError((error) => {
                 if (error instanceof HttpException) {
                     return throwError(() => error);
                 }
-                return throwError(() => new HttpException(
-                    '发生了意外错误',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                ));
+                return throwError(
+                    () =>
+                        new HttpException(
+                            "发生了意外错误",
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                        ),
+                );
             }),
         );
     }
@@ -68,7 +84,7 @@ export class TimeoutInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         return next.handle().pipe(
             timeout(5000),
-            catchError(err => {
+            catchError((err) => {
                 if (err instanceof TimeoutError) {
                     return throwError(() => new RequestTimeoutException());
                 }
@@ -92,7 +108,7 @@ export class CacheInterceptor implements NestInterceptor {
         // 如果有缓存且未过期，直接返回缓存数据
         if (cached && now - cached.timestamp < this.TTL) {
             console.log(`🎯 Cache hit: ${cacheKey}`);
-            return new Observable(subscriber => {
+            return new Observable((subscriber) => {
                 subscriber.next(cached.data);
                 subscriber.complete();
             });
@@ -100,7 +116,7 @@ export class CacheInterceptor implements NestInterceptor {
 
         // 无缓存或已过期，执行原始请求并缓存结果
         return next.handle().pipe(
-            tap(data => {
+            tap((data) => {
                 console.log(`💾 Cache miss: ${cacheKey}`);
                 this.cache.set(cacheKey, {
                     data,
@@ -115,9 +131,9 @@ export class CacheInterceptor implements NestInterceptor {
 export class ExcludeNullInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         return next.handle().pipe(
-            map(data => {
+            map((data) => {
                 if (Array.isArray(data)) {
-                    return data.filter(item => item !== null);
+                    return data.filter((item) => item !== null);
                 }
                 return data;
             }),

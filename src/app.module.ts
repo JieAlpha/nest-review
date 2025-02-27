@@ -16,7 +16,7 @@ import { ExampleInterceptorModule } from "./example-interceptor/example-intercep
         ExampleFilterModule,
         ExamplePipelineModule,
         ExampleGuardModule,
-        ExampleInterceptorModule
+        ExampleInterceptorModule,
     ],
     controllers: [AppController, ExampleControllerController],
     providers: [AppService],
